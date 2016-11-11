@@ -1,0 +1,22 @@
+{
+  "name": "recipe-worker",
+  "version": "1.0.0",
+  "description": "A worker role for our recipe creation",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Phil Barresi",
+  "license": "MIT",
+  "dependencies": {
+    "connect-redis": "3.1.0",
+    "express-redis-cache": "0.5.0",
+    "express-session": "1.14.2",
+    "mongodb": "2.2.11",
+    "node-fetch": "^1.6.3",
+    "node-redis-pubsub": "^0.9.0",
+    "passport": "0.3.2",
+    "passport-http-header-strategy": "1.0.4",
+    "redis": "2.6.3"
+  }
+}
