@@ -1,0 +1,34 @@
+{
+  "name": "recipes_react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"node app.js\" \"gulp\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "qi fu <cs.qifu@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-babel": "^6.1.2",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-concat": "^2.6.0",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.6.0"
+  },
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "concurrently": "^3.2.0",
+    "express": "^4.14.0",
+    "express-handlebars": "^3.0.0",
+    "handlebars": "^4.0.5",
+    "mongodb": "^2.1.18",
+    "node-uuid": "^1.4.7",
+    "xss": "^0.2.13"
+  }
+}
