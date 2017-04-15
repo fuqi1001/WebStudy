@@ -12,6 +12,7 @@ const RecipeContainer = React.createClass({
         }
     },
     componentDidMount: function () {
+        console.log("run mount");
         $.ajax({
             url: this.props.url,
             dataType: 'json',

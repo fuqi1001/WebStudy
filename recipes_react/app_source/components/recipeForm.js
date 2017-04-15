@@ -16,7 +16,7 @@ const RecipeForm = (
         handleRecipeSubmission
     }) => {
     let visibleFormError = formError ? <div className="alert alert-danger">{formError}</div> : undefined;
-    let newTitleText = `new Recipe: ${title || ''}(${ingredients.length} ingredients, ${step.length} steps)`;
+    let newTitleText = `new Recipe: ${title || ''}(${ingredients.length} ingredients, ${steps.length} steps)`;
 
     return <div className="recipe">
         <h3>Add a new Recipe</h3>
@@ -45,7 +45,7 @@ const RecipeForm = (
                         className="form-control"
                         id="newDescription"
                         placeholder="Recipe description"
-                        value={descruption}
+                        value={description}
                         onChange={(e) => {
                             changeDescription(e.target.value);
                         }}>
