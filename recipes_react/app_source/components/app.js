@@ -3,6 +3,8 @@ const AppComponent = () => {
         <div className="col-sm-8">
             <RecipeContainer url="/recipes" />
         </div>
-        
+        <div className="col-sm-4">
+            <CommentContainer />
+        </div>
     </div>
 }

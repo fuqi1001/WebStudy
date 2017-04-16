@@ -8,10 +8,110 @@ var AppComponent = function AppComponent() {
             "div",
             { className: "col-sm-8" },
             React.createElement(RecipeContainer, { url: "/recipes" })
+        ),
+        React.createElement(
+            "div",
+            { className: "col-sm-4" },
+            React.createElement(CommentContainer, null)
         )
     );
 };
 "use strict";
+
+var CommentContainer = React.createClass({
+    displayName: "CommentContainer",
+    getInitialState: function getInitialState() {
+        return {
+            comments: [],
+            newComment: "",
+            commenterName: "",
+            error: ""
+        };
+    },
+    loadComments: function loadComments() {
+        return $.get("/comments");
+    },
+    addComment: function addComment(commenter, comment) {
+        return $.ajax({
+            url: "/comments",
+            dataType: "json",
+            contentType: "application/json",
+            method: "POST",
+            data: JSON.stringify({
+                comment: {
+                    commenter: commenter, comment: comment
+                }
+            })
+        });
+    },
+    componentDidMount: function componentDidMount() {
+        var _this = this;
+
+        this.loadComments().then(function (commentList) {
+            _this.setState({ comments: commentList });
+        });
+    },
+    handleCommentChange: function handleCommentChange(newText) {
+        this.setState({ newComment: newText });
+    },
+    handleCommentSubmission: function handleCommentSubmission(newComment, newCommenterName) {
+        var _this2 = this;
+
+        if (!newComment) {
+            this.setState({ error: "No comment provided" });
+            return;
+        };
+        if (!newCommenterName) {
+            this.setState({ errror: "No comment name provided" });
+            return;
+        }
+
+        var commentList = this.state.comments;
+        var currentlyMatchingComment = commentList.filter(function (commentData) {
+            return commentData.comment === newComment && commentData.commenter === newCommenterName;
+        });
+
+        if (currentlyMatchingComment.length > 0) {
+            this.setState({ errpr: "No spamming allowed" });
+            return;
+        }
+
+        this.setState({ error: "" });
+        this.setState({
+            newComment: ""
+        });
+
+        this.addComment(newCommenterName, newComment).then(function (newCommentObject) {
+            _this2.setState({
+                comments: _this2.state.comments.concat(newCommentObject)
+            });
+        }, function (error) {
+            _this2.setState({ error: JSON.stringify(error) });
+        });
+    },
+    handleCommentNameChange: function handleCommentNameChange(newCommenterName) {
+        if (!newCommenterName) return;
+
+        this.setState({
+            commenterName: newCommenterName
+        });
+    },
+    render: function render() {
+        return React.createElement(
+            "div",
+            null,
+            React.createElement(CommentList, { comments: this.state.comments }),
+            React.createElement(CommentForm, {
+                commenterName: this.state.commenterName,
+                comment: this.state.newComment,
+                onCommentChange: this.handleCommentChange,
+                onCommentSubmit: this.handleCommentSubmission,
+                onCommenterNameChange: this.handleCommentNameChange,
+                formError: this.state.error
+            })
+        );
+    }
+});
 "use strict";
 
 var RecipeContainer = React.createClass({
@@ -396,7 +496,94 @@ var RecipeForm = function RecipeForm(_ref) {
     );
 };
 "use strict";
+
+var CommentForm = function CommentForm(_ref) {
+    var comment = _ref.comment,
+        onCommentChange = _ref.onCommentChange,
+        onCommentSubmit = _ref.onCommentSubmit,
+        commenterName = _ref.commenterName,
+        onCommenterNameChange = _ref.onCommenterNameChange,
+        formError = _ref.formError;
+
+    var visibleFormError = formError ? React.createElement(
+        "div",
+        { className: "alert alert-danger" },
+        formError
+    ) : undefined;
+    return React.createElement(
+        "form",
+        {
+            onSubmit: function onSubmit(e) {
+                e.preventDefault();
+                onCommentSubmit(comment, commenterName);
+            } },
+        React.createElement(
+            "div",
+            { className: "form-group" },
+            React.createElement(
+                "label",
+                { htmlFor: "newComment", className: "input-control" },
+                "Comment"
+            ),
+            React.createElement("input", {
+                id: "newComment",
+                type: "text",
+                value: comment,
+                onChange: function onChange(e) {
+                    onCommentChange(e.target.value);
+                },
+                className: "form-control" })
+        ),
+        React.createElement(
+            "div",
+            { className: "form-group" },
+            React.createElement(
+                "label",
+                { htmlFor: "newName", className: "input-control" },
+                "Your name"
+            ),
+            React.createElement("input", {
+                id: "newName",
+                type: "text",
+                value: commenterName,
+                onChange: function onChange(e) {
+                    onCommenterNameChange(e.target.value);
+                },
+                className: "form-control"
+            })
+        ),
+        React.createElement(
+            "div",
+            { className: "form-group" },
+            React.createElement(
+                "button",
+                { type: "submit", className: "btn btn-primary" },
+                "Submit"
+            )
+        ),
+        visibleFormError
+    );
+};
 "use strict";
+
+var CommentList = function CommentList(_ref) {
+    var comments = _ref.comments;
+
+    return React.createElement(
+        "ul",
+        { className: "list-unstyled" },
+        comments.map(function (commentData) {
+            return React.createElement(
+                "li",
+                null,
+                "[",
+                commentData.commenter,
+                "]: ",
+                commentData.comment
+            );
+        })
+    );
+};
 "use strict";
 
 var RecipeList = function RecipeList(_ref) {
