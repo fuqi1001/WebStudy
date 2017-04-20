@@ -1,70 +1,65 @@
-var randomNumber = Math.floor(Math.random() * 100) + 1
-
+var guessFiled = document.querySelector('.guessField')
 var guesses = document.querySelector('.guesses')
 var lastResult = document.querySelector('.lastResult')
 var lowOrHigh = document.querySelector('.lowOrHigh')
-
 var guessSubmit = document.querySelector('.guessSubmit')
-var guessField = document.querySelector('.guessField')
 
-var guessCount = 1
+var randomNumber = Math.floor(Math.random() * 100) + 1
+var countGuess = 1
 var resetButton
 
+guessSubmit.addEventListener('click', guessfunc)
+
+
+function guessfunc() {
+    var userGuessNum = Number(guessFiled.value)
+    if(countGuess == 1) {
+        guesses.textContent = 'Prev guesses: '
+    }
+    guesses.textContent += userGuessNum +' '
+
+    if(userGuessNum == randomNumber) {
+        lastResult.style.backgroundColor = 'green'
+        lastResult.textContent = 'Bingo'
+        lowOrHigh.textContent = ''
+        setGameOver()
+    } else if(countGuess == 10) {
+        lastResult.style.backgroundColor = 'red'
+        lastResult.textContent = 'Game over, you fail'
+        setGameOver()
+    } else {
+        lastResult.style.backgroundColor = 'red'
+        lastResult.textContent = 'Wrong'
+        if(userGuessNum < randomNumber) {
+            lowOrHigh.textContent = 'low'
+        } else if(userGuessNum > randomNumber) {
+            lowOrHigh.textContent = 'high'
+        }
+    }
+    countGuess++
+    guessFiled.value = ''
+    guessFiled.focus()
+}
+
 function setGameOver() {
-    guessField.disabled = true
+    guessFiled.disabled = true
     guessSubmit.disabled = true
     resetButton = document.createElement('button')
-    resetButton.textContent = 'Reset'
+    resetButton.textContent = 'Restart game'
     document.body.appendChild(resetButton)
     resetButton.addEventListener('click', resetGame)
 }
 
 function resetGame() {
-    guessCount = 1
+    countGuess = 1
 
-    var resetParas = document.querySelectorAll('.resultParas p')
-    for(var i = 0; i < resetParas.length; i++) {
-        resetParas[i].textContent = ''
-    }
-
-    resetButton.parentNode.removeChild(resetButton)
-
-    guessField.disabled = false
+    guessFiled.disabled = false
     guessSubmit.disabled = false
-    guessField.value = ''
-    guessField.focus()
+    
+    guessFiled.value = ''
+    guessFiled.focus()
 
     lastResult.style.backgroundColor = 'white'
+    lowOrHigh.textContent = ''
     randomNumber = Math.floor(Math.random() * 100) + 1
 }
-function guessFunc() {
-    var userGuessNum = Number(guessField.value);
-    if(guessCount == 1) {
-        guesses.textContent= 'Prev guess:'
-    }
-    guesses.textContent += userGuessNum + ' '
-
-    if(userGuessNum == randomNumber) {
-        lastResult.textContent = 'Bingo!'
-        lastResult.style.backgroundColor = 'green'
-        lowOrHigh.textContent = ''
-        setGameOver()
-    } else if(guessCount == 10) {
-        lastResult.textContent = 'Game Over, you fail'
-        setGameOver()
-    } else {
-        lastResult.textContent = 'Wrong'
-        lastResult.style.backgroundColor = 'red'
-        if(userGuessNum < randomNumber) {
-            lowOrHigh.textContent = 'lower'
-        } else if(userGuessNum > randomNumber) {
-            lowOrHigh.textContent = 'higher'
-        }
-    }
-
-    guessCount++;
-    guessField.value = '';
-    guessField.focus();
-}
-
-guessSubmit.addEventListener('click', guessFunc)
